@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Rishiverse Login</title>
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <style>
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      font-family:Arial;
+      color:white;
+    }
+    .box{
+      background:#111;
+      padding:25px;
+      width:320px;
+      border-radius:15px;
+      box-shadow:0 0 30px black;
+      text-align:center;
+    }
+    input{
+      width:100%;
+      padding:10px;
+      margin:8px 0;
+      border-radius:8px;
+      border:none;
+      outline:none;
+    }
+    button{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      border:none;
+      border-radius:8px;
+      background:#ff9800;
+      font-weight:bold;
+      cursor:pointer;
+    }
+    button:hover{background:#ffa726;}
+    .google{
+      background:#4285F4;
+      margin-top:10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Rishiverse</h2>
+  <p>Login / Signup</p>
+
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+
+  <button onclick="signup()">Sign Up</button>
+  <button onclick="login()">Login</button>
+
+  <button class="google" onclick="googleLogin()">Login with Google</button>
+</div>
+
+<script>
+  // 🔥 FIREBASE CONFIG (NEXT STEP ME REAL CONFIG AAYEGA)
+  const firebaseConfig = {
+    apiKey: "PASTE_HERE",
+    authDomain: "PASTE_HERE",
+    projectId: "PASTE_HERE",
+    appId: "PASTE_HERE"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  function signup(){
+    const e=email.value;
+    const p=password.value;
+    auth.createUserWithEmailAndPassword(e,p)
+      .then(()=>alert("Signup Successful"))
+      .catch(err=>alert(err.message));
+  }
+
+  function login(){
+    const e=email.value;
+    const p=password.value;
+    auth.signInWithEmailAndPassword(e,p)
+      .then(()=>window.location.href="dashboard.html")
+      .catch(err=>alert(err.message));
+  }
+
+  function googleLogin(){
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .then(()=>window.location.href="dashboard.html")
+      .catch(err=>alert(err.message));
+  }
+</script>
+
+</body>
+</html>
