@@ -1,106 +1,160 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Rishiverse Login</title>
+<meta charset="UTF-8">
+<title>Rishiverse</title>
 
-  <!-- Firebase CDN (ONLY THIS) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-  <style>
-    body{
-      margin:0;
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-      font-family:Arial;
-      color:white;
-    }
-    .box{
-      background:#111;
-      padding:25px;
-      width:320px;
-      border-radius:15px;
-      box-shadow:0 0 30px black;
-      text-align:center;
-    }
-    input{
-      width:100%;
-      padding:10px;
-      margin:8px 0;
-      border-radius:8px;
-      border:none;
-      outline:none;
-    }
-    button{
-      width:100%;
-      padding:10px;
-      margin-top:10px;
-      border:none;
-      border-radius:8px;
-      background:#ff9800;
-      font-weight:bold;
-      cursor:pointer;
-    }
-    .google{
-      background:#4285F4;
-    }
-  </style>
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle at top,#1a2a6c,#000);
+  font-family:Arial;
+  color:white;
+}
+.box{
+  width:340px;
+  background:rgba(0,0,0,0.8);
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 0 40px #00e5ff;
+  text-align:center;
+}
+input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:none;
+  outline:none;
+}
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  background:#00e5ff;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:hover{background:#18ffff;}
+.google{background:#4285F4;}
+.hidden{display:none;}
+</style>
 </head>
 
 <body>
 
 <div class="box">
-  <h2>Rishiverse</h2>
-  <p>Login / Signup</p>
 
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
+<h2 id="title">Rishiverse</h2>
 
-  <button onclick="signup()">Sign Up</button>
-  <button onclick="login()">Login</button>
+<!-- STEP 1 -->
+<div id="step1">
+  <button onclick="showSignup()">Sign Up</button>
+  <button onclick="showLogin()">Login</button>
   <button class="google" onclick="googleLogin()">Login with Google</button>
 </div>
 
+<!-- SIGNUP STEP 2 -->
+<div id="step2" class="hidden">
+  <input id="username" placeholder="Choose Username">
+  <button onclick="nextToEmail()">Next</button>
+</div>
+
+<!-- SIGNUP STEP 3 -->
+<div id="step3" class="hidden">
+  <input id="email" type="email" placeholder="Email">
+  <button onclick="nextToPassword()">Next</button>
+</div>
+
+<!-- SIGNUP STEP 4 -->
+<div id="step4" class="hidden">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="signup()">Create Account</button>
+</div>
+
+<!-- LOGIN -->
+<div id="loginBox" class="hidden">
+  <input id="loginEmail" placeholder="Email">
+  <input id="loginPass" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+</div>
+
 <script>
-  // ✅ REAL FIREBASE CONFIG (ONLY ONCE)
-  const firebaseConfig = {
-    apiKey: "AIzaSyDn4jSn34Hah4GjRAKOPoBYfHtfSd7Y-kM",
-    authDomain: "initial-rishiverse-platform.firebaseapp.com",
-    projectId: "initial-rishiverse-platform",
-    appId: "1:31834210782:web:4fbe55befc466514bddd4f"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDn4jSn34Hah4GjRAKOPoBYfHtfSd7Y-kM",
+  authDomain: "initial-rishiverse-platform.firebaseapp.com",
+  projectId: "initial-rishiverse-platform",
+  appId: "1:31834210782:web:4fbe55befc466514bddd4f"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+let USERNAME="";
 
-  function signup(){
-    auth.createUserWithEmailAndPassword(
-      email.value,
-      password.value
-    ).then(()=>{
-      alert("Signup Successful");
-    }).catch(e=>alert(e.message));
-  }
+function hideAll(){
+  step1.classList.add("hidden");
+  step2.classList.add("hidden");
+  step3.classList.add("hidden");
+  step4.classList.add("hidden");
+  loginBox.classList.add("hidden");
+}
 
-  function login(){
-    auth.signInWithEmailAndPassword(
-      email.value,
-      password.value
-    ).then(()=>{
-      alert("Login Successful");
-    }).catch(e=>alert(e.message));
-  }
+function showSignup(){
+  hideAll();
+  step2.classList.remove("hidden");
+  title.innerText="Create Account";
+}
 
-  function googleLogin(){
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(()=>alert("Google Login Successful"))
-      .catch(e=>alert(e.message));
-  }
+function nextToEmail(){
+  USERNAME=username.value;
+  if(USERNAME.length<3){alert("Username too short");return;}
+  hideAll();
+  step3.classList.remove("hidden");
+}
+
+function nextToPassword(){
+  hideAll();
+  step4.classList.remove("hidden");
+}
+
+function signup(){
+  auth.createUserWithEmailAndPassword(email.value,password.value)
+  .then(()=>{
+    localStorage.setItem("username",USERNAME);
+    alert("Account Created!");
+  })
+  .catch(e=>alert(e.message));
+}
+
+function showLogin(){
+  hideAll();
+  loginBox.classList.remove("hidden");
+  title.innerText="Login";
+}
+
+function login(){
+  auth.signInWithEmailAndPassword(loginEmail.value,loginPass.value)
+  .then(()=>alert("Login Successful"))
+  .catch(e=>alert(e.message));
+}
+
+function googleLogin(){
+  const p=new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(p)
+  .then(()=>alert("Google Login Successful"))
+  .catch(e=>alert(e.message));
+}
 </script>
 
 </body>
