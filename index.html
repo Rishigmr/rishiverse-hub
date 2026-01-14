@@ -145,7 +145,8 @@ function showLogin(){
 
 function login(){
   auth.signInWithEmailAndPassword(loginEmail.value,loginPass.value)
-  .then(()=>alert("Login Successful"))
+ window.location.href="dashboard.html";
+
   .catch(e=>alert(e.message));
 }
 
