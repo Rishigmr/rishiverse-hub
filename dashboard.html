@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Rishiverse Dashboard</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0a0a0a;
+  color:white;
+}
+.header{
+  padding:15px;
+  background:#111;
+  text-align:center;
+  font-size:22px;
+  box-shadow:0 0 15px cyan;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:15px;
+  padding:20px;
+}
+.card{
+  background:#1a1a1a;
+  border-radius:12px;
+  padding:15px;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 0 10px #000;
+}
+.card:hover{
+  background:#222;
+  box-shadow:0 0 15px cyan;
+}
+.logout{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:red;
+  padding:10px 15px;
+  border-radius:8px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">🎮 Rishiverse Dashboard</div>
+
+<div class="grid">
+  <div class="card" onclick="openGame('game1.html')">Game 1</div>
+  <div class="card" onclick="openGame('game2.html')">Game 2</div>
+  <div class="card">Coming Soon</div>
+  <div class="card">Coming Soon</div>
+</div>
+
+<div class="logout" onclick="logout()">Logout</div>
+
+<script>
+function openGame(g){
+  alert("Game open karega: " + g);
+}
+
+function logout(){
+  localStorage.clear();
+  window.location.href="index.html";
+}
+</script>
+
+</body>
+</html>
